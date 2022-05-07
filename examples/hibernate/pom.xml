@@ -51,11 +51,11 @@
 	<dependencyManagement>
 		<dependencies>
 		
-			<dependency>
+			<!--<dependency>
 				<groupId>com.microsoft.sqlserver</groupId>
 				<artifactId>mssql-jdbc</artifactId>
 				<version>9.4.0.jre8</version>
-			</dependency>
+			</dependency>-->
 			<dependency>
 				<groupId>mysql</groupId>
 				<artifactId>mysql-connector-java</artifactId>

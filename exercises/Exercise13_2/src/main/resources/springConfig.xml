@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="
+     http://www.springframework.org/schema/beans
+     http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+     http://www.springframework.org/schema/aop
+     http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+     http://www.springframework.org/schema/task
+     http://www.springframework.org/schema/task/spring-task-4.0.xsd">
+
+
+    <bean id="accountService" class="com.example.exercise13_2.service.AccountService" abstract="true"></bean>
+    <bean id="accountServiceImpl" class="com.example.exercise13_2.service.impl.AccountServiceImpl"
+          parent="accountService">
+        <property name="accountDAO" ref="accountDAOImpl"></property>
+        <property name="currencyConverter" ref="currencyConverterServiceImpl"></property>
+        <property name="jmsSender" ref="jmsServiceImpl"></property>
+        <property name="logger" ref="loggerImpl"></property>
+
+    </bean>
+
+    <bean id="accountDAO" class="com.example.exercise13_2.dao.IAccountDAO" abstract="true"></bean>
+    <bean id="accountDAOImpl" class="com.example.exercise13_2.dao.AccountDAO" parent="accountDAO"></bean>
+
+    <bean id="currencyConverterService" class="com.example.exercise13_2.service.CurrencyConverter"
+          abstract="true"></bean>
+    <bean id="currencyConverterServiceImpl" class="com.example.exercise13_2.service.impl.CurrencyConverterImpl"
+          parent="currencyConverterService"></bean>
+
+    <bean id="jmsService" class="com.example.exercise13_2.jms.IJMSSender" abstract="true"></bean>
+    <bean id="jmsServiceImpl" class="com.example.exercise13_2.jms.JMSSender" parent="jmsService"></bean>
+
+    <bean id="logger" class="com.example.exercise13_2.logging.ILogger" abstract="true"></bean>
+    <bean id="loggerImpl" class="com.example.exercise13_2.logging.Logger" parent="logger"></bean>
+
+    <bean id="logTracingAdvice" class="com.example.exercise13_2.advice.LogTracing"></bean>
+
+    <aop:config>
+        <aop:aspect id="logTracing" ref="logTracingAdvice">
+            <aop:after method="logAllMethods" pointcut="execution(* com.example.exercise13_2.dao.*.*(..))"/>
+            <aop:around method="durationAllService" pointcut="execution(* com.example.exercise13_2.service.*.*(..))"/>
+            <aop:before method="logJmsMessage" pointcut="execution(* com.example.exercise13_2.jms.JMSSender.sendJMSMessage(..))"/>
+        </aop:aspect>
+    </aop:config>
+
+    <task:annotation-driven executor="myExecutor" />
+    <task:executor id="myExecutor" pool-size="5" />
+</beans>

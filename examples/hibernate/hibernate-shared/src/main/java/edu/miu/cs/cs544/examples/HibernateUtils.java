@@ -22,7 +22,7 @@ public class HibernateUtils {
                 settings.put(Environment.DRIVER, "com.mysql.cj.jdbc.Driver");
                 settings.put(Environment.URL, "jdbc:mysql://localhost:3306/cs544");
                 settings.put(Environment.USER, "root");
-                settings.put(Environment.PASS, "CS544-EA");
+                settings.put(Environment.PASS, "");
                 settings.put(Environment.DIALECT, "org.hibernate.dialect.MySQL8Dialect");
 
                 settings.put(Environment.SHOW_SQL, "true");

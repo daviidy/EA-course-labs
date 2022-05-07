@@ -1,0 +1,8 @@
+<hibernate-configuration>
+    <session-factory>
+        ...
+        <!-- Use the thread local session pattern -->
+        <property name="current_session_context_class">thread</property>
+        ...
+    </session-factory>
+</hibernate-configuration>
